@@ -3,12 +3,14 @@
 Workflow:
 
 Updating your repo from master:
+
     git checkout master
     git pull
     git checkout your-branch-name
     git merge master
   
 When you're committing something (still on your own branch):
+
     git add -u .
     git commit -m description-of-commit-here
     git push origin your-branch-name

@@ -1,1 +1,4 @@
-sceneSetups: []
+sceneSetups:
+- path: Assets/Levels/Hello World Level.unity
+  isLoaded: 1
+  isActive: 1

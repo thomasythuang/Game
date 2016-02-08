@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharScript : MonoBehaviour {
+public class PlayerController : MonoBehaviour {
 
-	public Vector2 JumpVelocity;
-	public Vector2 RunVelocity;
+	public float moveSpeed;
+	public float jumpHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -13,12 +13,16 @@ public class CharScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Jump")) {
-			this.GetComponent<Rigidbody2D>().AddForce(JumpVelocity, ForceMode2D.Impulse);
+		if (Input.GetKeyDown(KeyCode.UpArrow)) {
+			this.GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
 		}
 
-		if (Input.GetButtonDown("Horizontal")) {
-			this.GetComponent<Rigidbody2D>().AddForce(RunVelocity, ForceMode2D.Force);
+		if (Input.GetKey(KeyCode.RightArrow)) {
+			this.GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+		}
+
+		if (Input.GetKey(KeyCode.LeftArrow)) {
+			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
 	}
 }

@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
 	public float moveSpeed;
 	public float jumpHeight;
-
-  public void RestartLevel()
-  {
-    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-  }
 
 	// Use this for initialization
 	void Start () {
@@ -31,9 +25,5 @@ public class PlayerController : MonoBehaviour {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
 
-    if (Input.GetKeyDown(KeyCode.R))
-    {
-      RestartLevel();
-    }
 	}
 }

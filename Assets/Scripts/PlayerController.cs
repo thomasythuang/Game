@@ -3,14 +3,17 @@ using System;
 
 public class PlayerController : MonoBehaviour {
 
-	public float moveSpeed;
-	public float jumpHeight;
+  public int maxHealth;
+  public int currentHealth;
+  public float moveSpeed;
+  public float jumpHeight;
 
+  public event Action HealthChange = delegate {};
   public event Action CharacterDied = delegate {};
 
 	// Use this for initialization
 	void Start () {
-    
+    currentHealth = maxHealth;
   }
 	
 	// Update is called once per frame
@@ -32,5 +35,32 @@ public class PlayerController : MonoBehaviour {
       Destroy(this.gameObject);
       CharacterDied.Invoke();
     }
+
+    if (Input.GetKeyDown(KeyCode.LeftBracket))
+    {
+      currentHealth--;
+      if (currentHealth > 0)
+      {
+        HealthChange.Invoke();
+      }
+      else
+      {
+        DestroyThisCharacter();
+      }
+    }
+    if (Input.GetKeyDown(KeyCode.RightBracket))
+    {
+      if (currentHealth < 4)
+      {
+        currentHealth++;
+        HealthChange.Invoke();
+      }
+    }
 	}
+
+  private void DestroyThisCharacter()
+  {
+    Destroy(this.gameObject);
+    CharacterDied.Invoke();
+  }
 }

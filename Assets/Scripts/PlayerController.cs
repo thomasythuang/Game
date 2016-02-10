@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 public class PlayerController : MonoBehaviour {
 
 	public float moveSpeed;
 	public float jumpHeight;
+
+  public event Action CharacterDied = delegate {};
 
 	// Use this for initialization
 	void Start () {
@@ -25,5 +27,10 @@ public class PlayerController : MonoBehaviour {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
 
+    if (this.transform.position.y < -7)
+    {
+      Destroy(this.gameObject);
+      CharacterDied.Invoke();
+    }
 	}
 }

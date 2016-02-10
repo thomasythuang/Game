@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-	}
+    
+  }
 	
 	// Update is called once per frame
 	void Update () {
@@ -24,5 +24,6 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
+
 	}
 }

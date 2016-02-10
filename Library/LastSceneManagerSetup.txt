@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Levels/Hello World Level.unity
+- path: Assets/Levels/Gap Level.unity
   isLoaded: 1
   isActive: 1

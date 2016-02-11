@@ -3,6 +3,7 @@ using System;
 
 public class PlayerController : MonoBehaviour {
 
+    public bool selected;
     public int maxHealth;
     public int currentHealth;
     public float moveSpeed;
@@ -43,25 +44,28 @@ public class PlayerController : MonoBehaviour {
 		}
 
         if (Input.GetKeyDown(KeyCode.Space)) {
-            // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
-            if (currentHealth > 1)
+            if (selected)
             {
-                int health;
-                if (currentHealth == 4)
+                // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
+                if (currentHealth > 1)
                 {
-                    health = 2;
-                    setHealth(2);
-                }
-                else
-                {
-                    health = 1;
-                    setHealth(1);
-                }
+                    int health;
+                    if (currentHealth == 4)
+                    {
+                        health = 2;
+                        setHealth(2);
+                    }
+                    else
+                    {
+                        health = 1;
+                        setHealth(1);
+                    }
 
-                Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
-                Vector3 newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
-                Quaternion quat = new Quaternion();
-                CloneCharacter(health, newPos, quat);
+                    Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
+                    Vector3 newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+                    Quaternion quat = new Quaternion();
+                    CloneCharacter(health, newPos, quat);
+                }
             }
         }
 
@@ -103,35 +107,38 @@ public class PlayerController : MonoBehaviour {
     {
         GameObject clone = Instantiate(Resources.Load("Character"), pos, quat) as GameObject;
         PlayerController cloneController = clone.GetComponent<PlayerController>();
+        cloneController.selected = false;
         cloneController.currentHealth = health;
-        cloneController.setSprite(cloneController);
+        cloneController.initSprite(cloneController);
         return clone;
     }
 
-    // This is needed to set the initial sprite when a new character is instantiated
+    // This is needed to set the initial sprites when a new character is instantiated
     // Resources.LoadAll is too slow, so the resouces don't load properly if HealthChange is invoked at instantiation
-    private void setSprite(PlayerController controller)
+    private void initSprite(PlayerController controller)
     {
-        HealthManager healthManager = this.transform.Find("Health Display").GetComponent<HealthManager>();
-        SpriteRenderer spriteRenderer = healthManager.gameObject.GetComponent<SpriteRenderer>();
+        SpriteRenderer indicatorSpriteRenderer = this.transform.Find("Selected Indicator").GetComponent<SpriteRenderer>();
+        indicatorSpriteRenderer.enabled = false;
+
+        SpriteRenderer healthSpriteRenderer = this.transform.Find("Health Display").GetComponent<SpriteRenderer>();
         Sprite[] healthSprites = Resources.LoadAll<Sprite>("life_hearts");
         int health = controller.currentHealth;
 
         if (health == 1)
         {
-            spriteRenderer.sprite = healthSprites[0];
+            healthSpriteRenderer.sprite = healthSprites[0];
         }
         else if (health == 2)
         {
-            spriteRenderer.sprite = healthSprites[1];
+            healthSpriteRenderer.sprite = healthSprites[1];
         }
         else if (health == 3)
         {
-            spriteRenderer.sprite = healthSprites[2];
+            healthSpriteRenderer.sprite = healthSprites[2];
         }
         else
         {
-            spriteRenderer.sprite = healthSprites[3];
+            healthSpriteRenderer.sprite = healthSprites[3];
         }
     }
 

@@ -3,22 +3,32 @@ using System;
 
 public class PlayerController : MonoBehaviour {
 
-  public int maxHealth;
-  public int currentHealth;
-  public float moveSpeed;
-  public float jumpHeight;
+    public int maxHealth;
+    public int currentHealth;
+    public float moveSpeed;
+    public float jumpHeight;
 
-  public event Action HealthChange = delegate {};
-  public event Action CharacterDied = delegate {};
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask whatIsGround;
+    private bool grounded;
+
+    public event Action HealthChange = delegate {};
+    public event Action CharacterDied = delegate {};
 
 	// Use this for initialization
 	void Start () {
-    currentHealth = maxHealth;
-  }
+        currentHealth = maxHealth;
+    }
 	
+    void FixedUpdate()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+    }
+
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.UpArrow)) {
+		if (Input.GetKeyDown(KeyCode.UpArrow) && grounded) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
 		}
 

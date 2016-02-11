@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour {
                         health = 1;
                         setHealth(1);
                     }
-
                     Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
                     Vector3 newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
                     Quaternion quat = new Quaternion();

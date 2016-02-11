@@ -30,32 +30,39 @@ public class PlayerController : MonoBehaviour {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 		}
 
-    if (this.transform.position.y < -7)
-    {
-      Destroy(this.gameObject);
-      CharacterDied.Invoke();
-    }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+                Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
+                Vector3 newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+                Quaternion quat = new Quaternion();
+                UnityEngine.Object.Instantiate(this, newPos, quat);
+        }
 
-    if (Input.GetKeyDown(KeyCode.LeftBracket))
-    {
-      currentHealth--;
-      if (currentHealth > 0)
-      {
-        HealthChange.Invoke();
-      }
-      else
-      {
-        DestroyThisCharacter();
-      }
-    }
-    if (Input.GetKeyDown(KeyCode.RightBracket))
-    {
-      if (currentHealth < 4)
-      {
-        currentHealth++;
-        HealthChange.Invoke();
-      }
-    }
+        if (this.transform.position.y < -7)
+        {
+          Destroy(this.gameObject);
+          CharacterDied.Invoke();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftBracket))
+        {
+          currentHealth--;
+          if (currentHealth > 0)
+          {
+            HealthChange.Invoke();
+          }
+          else
+          {
+            DestroyThisCharacter();
+          }
+        }
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+          if (currentHealth < 4)
+          {
+            currentHealth++;
+            HealthChange.Invoke();
+          }
+        }
 	}
 
   private void DestroyThisCharacter()

@@ -18,6 +18,8 @@ x64/
 *.suo
 *.user
 *.sln.docstates
+*.csproj
+*.sln
 
 # Debug artifacts
 *.mdb

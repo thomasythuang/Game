@@ -144,6 +144,10 @@ public class PlayerController : MonoBehaviour {
     private void DestroyCharacter()
     {
         Destroy(this.gameObject);
+        InfoTextScript infoTextScript = GameObject.Find("Info Text").GetComponent<InfoTextScript>();
+        infoTextScript.destroyedCharacters++;
         CharacterDied.Invoke();
     }
+
+    
 }

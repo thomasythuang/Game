@@ -15,6 +15,11 @@ public class LevelScript : MonoBehaviour {
         {
             RestartLevel();
         }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");
+            Debug.Log(characters.Length);
+        }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");

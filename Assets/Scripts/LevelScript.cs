@@ -43,6 +43,18 @@ public class LevelScript : MonoBehaviour {
                             break;
                         }
                     }
+                    if (i == (characters.Length - 1))
+                    {
+                        SelectCharacter(characters[0]);
+                        break;
+                    }
+                }
+            }
+            else if (characters.Length == 1)
+            {
+                if (!characters[0].GetComponent<PlayerController>().selected)
+                {
+                    SelectCharacter(characters[0]);
                 }
             }
         }

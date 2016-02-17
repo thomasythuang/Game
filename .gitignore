@@ -3,6 +3,7 @@ Temp/
 Obj/
 Library/
 UnityPlayer_Symbols.pdb
+Builds/
 
 # MonoDevelop user-specific
 *.userprefs

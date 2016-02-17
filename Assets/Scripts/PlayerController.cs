@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
@@ -85,6 +86,39 @@ public class PlayerController : MonoBehaviour {
             }
         }
 	}
+
+    void OnCollisionEnter2D(Collision2D col)
+    { 
+        if (col.gameObject.layer == 11)
+        {
+            if (currentHealth > 1)
+            {
+                setHealth(currentHealth - 1);
+            }
+            else
+            {
+                DestroyCharacter();
+            }
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D col)
+    {
+        //yield return new WaitForSeconds(0.25);
+
+        if (col.gameObject.layer == 11)
+        {
+            if (currentHealth > 1)
+            {
+                setHealth(currentHealth - 1);
+            }
+            else
+            {
+                DestroyCharacter();
+            }
+        }
+    }
+
 
     // Change currentHealth to the given value, and invoke HealthChange to update the health sprite
     private void setHealth(int health)

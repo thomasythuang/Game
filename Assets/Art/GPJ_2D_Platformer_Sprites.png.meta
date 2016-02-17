@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e2efd7a04a8014e4e989193b26f6e487
-timeCreated: 1454990438
+timeCreated: 1455684907
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,7 @@ TextureImporter:
     21300002: Terrain
     21300004: Exit
     21300006: Entrance
+    21300008: Spikes
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -72,6 +73,17 @@ TextureImporter:
         y: 48
         width: 19
         height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Spikes
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 80
+        width: 15
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

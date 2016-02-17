@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public int currentHealth;
     public float moveSpeed;
     public float jumpHeight;
+    private bool touchingSpikes;
+    private float startTime;
 
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -68,6 +71,22 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
+        if (touchingSpikes)
+        {
+            if (Time.time > startTime + 3)
+            {
+                if (currentHealth > 1)
+                {
+                    setHealth(currentHealth - 1);
+                    startTime = Time.time;
+                }
+                else
+                {
+                    DestroyCharacter();
+                }
+            }
+        }
+
         if (this.transform.position.y < -7)
         {
             DestroyCharacter();
@@ -85,6 +104,24 @@ public class PlayerController : MonoBehaviour {
             }
         }
 	}
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.layer == 11)
+        {
+            startTime = Time.time - 4;
+            touchingSpikes = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.layer == 11)
+        {
+            touchingSpikes = false;
+        }
+    }
+
 
     // Change currentHealth to the given value, and invoke HealthChange to update the health sprite
     private void setHealth(int health)

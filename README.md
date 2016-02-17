@@ -2,6 +2,12 @@
 
 Workflow:
 
+For merge conflicts (especially if it's just the projectsettings.asset file):
+    
+    git checkout --theirs the-merge-error-file-name
+
+Then re-add the files and commit the changes. You should then be merged!
+
 Updating your repo from master:
 
     git checkout master

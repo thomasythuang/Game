@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e2efd7a04a8014e4e989193b26f6e487
-timeCreated: 1455684907
+timeCreated: 1455755073
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -9,6 +9,7 @@ TextureImporter:
     21300004: Exit
     21300006: Entrance
     21300008: Spikes
+    21300010: Lock
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -83,6 +84,17 @@ TextureImporter:
         x: 16
         y: 80
         width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Lock
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 17
+        width: 11
         height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}

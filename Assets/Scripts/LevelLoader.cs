@@ -15,7 +15,7 @@ public class LevelLoader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Input.GetKeyDown(KeyCode.W) && characterInZone)
+	    if(Input.GetKeyDown(KeyCode.UpArrow) && characterInZone)
         {
             SceneManager.LoadScene(LevelToLoad);
         }

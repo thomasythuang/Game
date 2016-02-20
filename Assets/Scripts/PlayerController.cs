@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public float jumpHeight;
     private bool touchingSpikes;
     private float startTime;
+    public string direction;
 
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -40,10 +41,20 @@ public class PlayerController : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.RightArrow)) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
+            if (direction != "right")
+            {
+                ChangeDirection("right");
+            }
 		}
 
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+
+            if (direction != "left")
+            {
+                ChangeDirection("left");
+            }
 		}
 
         if (Input.GetKeyDown(KeyCode.Space)) {
@@ -64,9 +75,17 @@ public class PlayerController : MonoBehaviour {
                         setHealth(1);
                     }
                     Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
-                    Vector3 newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+                    Vector3 newPos;
+                    if (direction == "left")
+                    {
+                        newPos = new Vector3(oldPos.x - 3, oldPos.y, 0);
+                    }
+                    else
+                    {
+                        newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+                    }
                     Quaternion quat = new Quaternion();
-                    CloneCharacter(health, newPos, quat);
+                    CloneCharacter(health, newPos, quat, direction);
                 }
             }
         }
@@ -105,6 +124,23 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
+    void ChangeDirection(string newDirection)
+    {
+        SpriteRenderer spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
+        if (newDirection == "left")
+        {
+            direction = "left";
+            Sprite characterLeft = Resources.Load<Sprite>("character_left");
+            spriteRenderer.sprite = characterLeft;
+        }
+        else
+        {
+            direction = "right";
+            Sprite characterRight = Resources.Load<Sprite>("character_right");
+            spriteRenderer.sprite = characterRight;
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.layer == 11)
@@ -139,27 +175,29 @@ public class PlayerController : MonoBehaviour {
     }
     
     // Create a new character and set its health to half the value of the original
-    private GameObject CloneCharacter(int health, Vector3 pos, Quaternion quat)
+    private GameObject CloneCharacter(int health, Vector3 pos, Quaternion quat, string initialDirection)
     {
         GameObject clone = Instantiate(Resources.Load("Character"), pos, quat) as GameObject;
         PlayerController cloneController = clone.GetComponent<PlayerController>();
         cloneController.selected = false;
         cloneController.currentHealth = health;
-        cloneController.initSprite(cloneController);
+        cloneController.direction = initialDirection;
+        cloneController.initCharacterSprites(cloneController);
         return clone;
     }
 
     // This is needed to set the initial sprites when a new character is instantiated
     // Resources.LoadAll is too slow, so the resouces don't load properly if HealthChange is invoked at instantiation
-    private void initSprite(PlayerController controller)
+    private void initCharacterSprites(PlayerController controller)
     {
+        // Disable the selection sprite upon instantiation
         SpriteRenderer indicatorSpriteRenderer = this.transform.Find("Selected Indicator").GetComponent<SpriteRenderer>();
         indicatorSpriteRenderer.enabled = false;
 
+        // Set the starting health to the appropriate amount
         SpriteRenderer healthSpriteRenderer = this.transform.Find("Health Display").GetComponent<SpriteRenderer>();
         Sprite[] healthSprites = Resources.LoadAll<Sprite>("life_hearts");
         int health = controller.currentHealth;
-
         if (health == 1)
         {
             healthSpriteRenderer.sprite = healthSprites[0];
@@ -176,6 +214,8 @@ public class PlayerController : MonoBehaviour {
         {
             healthSpriteRenderer.sprite = healthSprites[3];
         }
+
+        controller.ChangeDirection(controller.direction);
     }
 
     private void DestroyCharacter()

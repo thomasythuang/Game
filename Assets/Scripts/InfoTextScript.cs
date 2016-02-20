@@ -24,7 +24,7 @@ public class InfoTextScript : MonoBehaviour
         if (characters == null || characters.Length == (0 + destroyedCharacters))
         {
             GameObject infoTextObject = this.gameObject;
-            infoTextObject.GetComponent<Text>().text = string.Format("You died! \nPress R to restart the level");
+            infoTextObject.GetComponent<Text>().text = string.Format("You died.\nPress R to restart the level.");
         }
         destroyedCharacters--;
     }

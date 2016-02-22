@@ -18,21 +18,23 @@ public class PlayerController : MonoBehaviour {
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask whatIsGround;
+    public LayerMask whatIsHazard;
     private bool grounded;
 
-    public event Action HealthChange = delegate {};
-    public event Action CharacterDied = delegate {};
+    public event Action HealthChange = delegate { };
+    public event Action CharacterDied = delegate { };
 
-	// Use this for initialization
-	void Start () {      
+    // Use this for initialization
+    void Start() {
         InfoTextScript infoTextScript = GameObject.Find("Info Text").GetComponent<InfoTextScript>();
         CharacterDied += infoTextScript.OnCharacterDied;
         this.gameObject.tag = "Character";
     }
-	
+
     void FixedUpdate()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        grounded = grounded || Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsHazard);
     }
 
 	// Update is called once per frame

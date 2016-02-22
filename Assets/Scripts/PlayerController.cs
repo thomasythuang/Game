@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
     private bool touchingSpikes;
     private float startTime;
     public string direction;
+    private bool invulnerable;
+    public float invulnerableDuration;
 
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -90,20 +92,17 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (touchingSpikes)
+        if (invulnerable && Time.time > startTime + invulnerableDuration)
         {
-            if (Time.time > startTime + 3)
-            {
-                if (currentHealth > 1)
-                {
-                    setHealth(currentHealth - 1);
-                    startTime = Time.time;
-                }
-                else
-                {
-                    DestroyCharacter();
-                }
-            }
+            invulnerable = false;
+        }
+
+        if (touchingSpikes && !invulnerable)
+        {
+            invulnerable = true;
+            startTime = Time.time;
+            setHealth(currentHealth - 1);
+            StartCoroutine(blinkSmooth(4f, invulnerableDuration, Color.red));
         }
 
         if (this.transform.position.y < -7)
@@ -145,7 +144,6 @@ public class PlayerController : MonoBehaviour {
     {
         if (col.gameObject.layer == 11)
         {
-            startTime = Time.time - 4;
             touchingSpikes = true;
         }
     }
@@ -216,6 +214,24 @@ public class PlayerController : MonoBehaviour {
         }
 
         controller.ChangeDirection(controller.direction);
+    }
+
+    IEnumerator blinkSmooth(float timeScale, float duration, Color blinkColor)
+    {
+        var material = GetComponent<SpriteRenderer>().material;
+        var elapsedTime = 0f;
+        while (elapsedTime <= duration)
+        {
+            material.SetColor("_BlinkColor", blinkColor);
+
+            blinkColor.a = Mathf.PingPong(elapsedTime * timeScale, 1f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // revert to our standard sprite color
+        blinkColor.a = 0f;
+        material.SetColor("_BlinkColor", blinkColor);
     }
 
     private void DestroyCharacter()

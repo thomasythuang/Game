@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e2efd7a04a8014e4e989193b26f6e487
-timeCreated: 1455755073
+timeCreated: 1456107840
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -81,10 +81,10 @@ TextureImporter:
     - name: Spikes
       rect:
         serializedVersion: 2
-        x: 16
+        x: 17
         y: 80
-        width: 15
-        height: 13
+        width: 14
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

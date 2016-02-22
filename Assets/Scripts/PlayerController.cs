@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour {
             invulnerable = true;
             startTime = Time.time;
             setHealth(currentHealth - 1);
-            StartCoroutine(blinkSmooth(4f, 2f, Color.red));
+            StartCoroutine(blinkSmooth(4f, invulnerableDuration, Color.red));
         }
 
         if (this.transform.position.y < -7)
@@ -144,7 +144,6 @@ public class PlayerController : MonoBehaviour {
     {
         if (col.gameObject.layer == 11)
         {
-            //startTime = Time.time - 4;
             touchingSpikes = true;
         }
     }

@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour {
     private bool invulnerable;
     public float invulnerableDuration;
 
+    public AudioSource jumpSoundEffect;
+    public AudioSource damageSoundEffect;
+    public AudioSource projectionSoundEffect;
+
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask whatIsGround;
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.UpArrow) && grounded) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+            jumpSoundEffect.Play();
 		}
 
 		if (Input.GetKey(KeyCode.RightArrow)) {
@@ -101,6 +106,7 @@ public class PlayerController : MonoBehaviour {
 
         if (touchingSpikes && !invulnerable)
         {
+            damageSoundEffect.Play();
             invulnerable = true;
             startTime = Time.time;
             setHealth(currentHealth - 1);
@@ -177,6 +183,7 @@ public class PlayerController : MonoBehaviour {
     // Create a new character and set its health to half the value of the original
     private GameObject CloneCharacter(int health, Vector3 pos, Quaternion quat, string initialDirection)
     {
+        projectionSoundEffect.Play();
         GameObject clone = Instantiate(Resources.Load("Character"), pos, quat) as GameObject;
         PlayerController cloneController = clone.GetComponent<PlayerController>();
         cloneController.selected = false;
@@ -238,6 +245,8 @@ public class PlayerController : MonoBehaviour {
 
     private void DestroyCharacter()
     {
+        LevelScript levelScript = GameObject.Find("Level Manager").GetComponent<LevelScript>();
+        levelScript.deathSoundEffect.Play();
         Destroy(this.gameObject);
         InfoTextScript infoTextScript = GameObject.Find("Info Text").GetComponent<InfoTextScript>();
         infoTextScript.destroyedCharacters++;

@@ -1,0 +1,27 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class GateScript : MonoBehaviour {
+
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+
+    public void disableLock ()
+    {
+        this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = false;
+        this.transform.Find("Terrain").GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    public void enableLock ()
+    {
+        this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = true;
+        this.transform.Find("Terrain").GetComponent<BoxCollider2D>().enabled = true;
+    }
+}

@@ -43,12 +43,12 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.UpArrow) && grounded) {
+		if (selected && Input.GetKeyDown(KeyCode.UpArrow) && grounded) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
             jumpSoundEffect.Play();
 		}
 
-		if (Input.GetKey(KeyCode.RightArrow)) {
+		if (selected && Input.GetKey(KeyCode.RightArrow)) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
             if (direction != "right")
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
             }
 		}
 
-		if (Input.GetKey(KeyCode.LeftArrow)) {
+		if (selected && Input.GetKey(KeyCode.LeftArrow)) {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
             if (direction != "left")
@@ -66,36 +66,33 @@ public class PlayerController : MonoBehaviour {
             }
 		}
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (selected)
+        if (selected && Input.GetKeyDown(KeyCode.Space)) {
+            // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
+            if (currentHealth > 1)
             {
-                // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
-                if (currentHealth > 1)
+                int health;
+                if (currentHealth == 4)
                 {
-                    int health;
-                    if (currentHealth == 4)
-                    {
-                        health = 2;
-                        setHealth(2);
-                    }
-                    else
-                    {
-                        health = 1;
-                        setHealth(1);
-                    }
-                    Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
-                    Vector3 newPos;
-                    if (direction == "left")
-                    {
-                        newPos = new Vector3(oldPos.x - 3, oldPos.y, 0);
-                    }
-                    else
-                    {
-                        newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
-                    }
-                    Quaternion quat = new Quaternion();
-                    CloneCharacter(health, newPos, quat, direction);
+                    health = 2;
+                    setHealth(2);
                 }
+                else
+                {
+                    health = 1;
+                    setHealth(1);
+                }
+                Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
+                Vector3 newPos;
+                if (direction == "left")
+                {
+                    newPos = new Vector3(oldPos.x - 3, oldPos.y, 0);
+                }
+                else
+                {
+                    newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+                }
+                Quaternion quat = new Quaternion();
+                CloneCharacter(health, newPos, quat, direction);
             }
         }
 
@@ -181,16 +178,16 @@ public class PlayerController : MonoBehaviour {
     }
     
     // Create a new character and set its health to half the value of the original
-    private GameObject CloneCharacter(int health, Vector3 pos, Quaternion quat, string initialDirection)
+    private void CloneCharacter(int health, Vector3 pos, Quaternion quat, string initialDirection)
     {
         projectionSoundEffect.Play();
         GameObject clone = Instantiate(Resources.Load("Character"), pos, quat) as GameObject;
         PlayerController cloneController = clone.GetComponent<PlayerController>();
-        cloneController.selected = false;
         cloneController.currentHealth = health;
         cloneController.direction = initialDirection;
         cloneController.initCharacterSprites(cloneController);
-        return clone;
+        SelectCharacter(clone);
+        DeselectCharacter(this.gameObject);
     }
 
     // This is needed to set the initial sprites when a new character is instantiated
@@ -199,7 +196,7 @@ public class PlayerController : MonoBehaviour {
     {
         // Disable the selection sprite upon instantiation
         SpriteRenderer indicatorSpriteRenderer = this.transform.Find("Selected Indicator").GetComponent<SpriteRenderer>();
-        indicatorSpriteRenderer.enabled = false;
+        indicatorSpriteRenderer.enabled = true;
 
         // Set the starting health to the appropriate amount
         SpriteRenderer healthSpriteRenderer = this.transform.Find("Health Display").GetComponent<SpriteRenderer>();
@@ -241,6 +238,22 @@ public class PlayerController : MonoBehaviour {
         // revert to our standard sprite color
         blinkColor.a = 0f;
         material.SetColor("_BlinkColor", blinkColor);
+    }
+
+    private void SelectCharacter(GameObject character)
+    {
+        PlayerController controller = character.GetComponent<PlayerController>();
+        controller.selected = true;
+        SpriteRenderer indicatorSpriteRenderer = character.transform.Find("Selected Indicator").GetComponent<SpriteRenderer>();
+        indicatorSpriteRenderer.enabled = true;
+    }
+
+    private void DeselectCharacter(GameObject character)
+    {
+        PlayerController controller = character.GetComponent<PlayerController>();
+        controller.selected = false;
+        SpriteRenderer indicatorSpriteRenderer = character.transform.Find("Selected Indicator").GetComponent<SpriteRenderer>();
+        indicatorSpriteRenderer.enabled = false;
     }
 
     private void DestroyCharacter()

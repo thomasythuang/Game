@@ -164,7 +164,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-
     // Change currentHealth to the given value, and invoke HealthChange to update the health sprite
     private void setHealth(int health)
     {

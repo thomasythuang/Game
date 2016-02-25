@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelScript : MonoBehaviour {
 
+    public AudioSource deathSoundEffect;
+
     // Use this for initialization
     void Start () {
 	

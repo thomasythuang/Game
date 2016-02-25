@@ -6,8 +6,8 @@ public class LevelSelect : MonoBehaviour
 {
 
     // For each level button, specify the level number in the onClick section of the Unity Editor
-    public void LoadLevel(int num)
+    public void LoadLevel(string levelName)
     {
-        SceneManager.LoadScene("Level " + num.ToString());
+        SceneManager.LoadScene(levelName);
     }
 }

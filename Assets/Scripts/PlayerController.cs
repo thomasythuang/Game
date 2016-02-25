@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour {
     public int currentHealth;
     public float moveSpeed;
     public float jumpHeight;
-    private bool touchingSpikes;
     private float startTime;
     public string direction;
     private bool invulnerable;
@@ -43,13 +42,20 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        Rigidbody2D characterRigidbody = this.GetComponent<Rigidbody2D>();
+
+        if (characterRigidbody.IsSleeping())
+        {
+            characterRigidbody.WakeUp();
+        }
+
 		if (selected && Input.GetKeyDown(KeyCode.UpArrow) && grounded) {
-			this.GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
+			characterRigidbody.velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
             jumpSoundEffect.Play();
 		}
 
 		if (selected && Input.GetKey(KeyCode.RightArrow)) {
-			this.GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+			characterRigidbody.velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
             if (direction != "right")
             {
@@ -58,7 +64,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (selected && Input.GetKey(KeyCode.LeftArrow)) {
-			this.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            characterRigidbody.velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
             if (direction != "left")
             {
@@ -74,12 +80,12 @@ public class PlayerController : MonoBehaviour {
                 if (currentHealth == 4)
                 {
                     health = 2;
-                    setHealth(2);
+                    SetHealth(2);
                 }
                 else
                 {
                     health = 1;
-                    setHealth(1);
+                    SetHealth(1);
                 }
                 Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
                 Vector3 newPos;
@@ -101,15 +107,6 @@ public class PlayerController : MonoBehaviour {
             invulnerable = false;
         }
 
-        if (touchingSpikes && !invulnerable)
-        {
-            damageSoundEffect.Play();
-            invulnerable = true;
-            startTime = Time.time;
-            setHealth(currentHealth - 1);
-            StartCoroutine(blinkSmooth(4f, invulnerableDuration, Color.red));
-        }
-
         if (this.transform.position.y < -7)
         {
             DestroyCharacter();
@@ -117,14 +114,11 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.LeftBracket))
         {
-            setHealth(currentHealth - 1);
+            SetHealth(currentHealth - 1);
         }
         if (Input.GetKeyDown(KeyCode.RightBracket))
         {
-            if (currentHealth < 4)
-            {
-                setHealth(currentHealth + 1);
-            }
+            SetHealth(currentHealth + 1);
         }
 	}
 
@@ -145,30 +139,30 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    public void DamageCharacter()
     {
-        if (col.gameObject.layer == 11)
+        if (!invulnerable)
         {
-            touchingSpikes = true;
-        }
-    }
-
-    void OnCollisionExit2D(Collision2D col)
-    {
-        if (col.gameObject.layer == 11)
-        {
-            touchingSpikes = false;
+            damageSoundEffect.Play();
+            invulnerable = true;
+            startTime = Time.time;
+            SetHealth(currentHealth - 1);
+            StartCoroutine(BlinkSmooth(4f, invulnerableDuration, Color.red));
         }
     }
 
 
     // Change currentHealth to the given value, and invoke HealthChange to update the health sprite
-    private void setHealth(int health)
+    public void SetHealth(int health)
     {
-        if (health > 0)
+        if (health > 0 && health < 5)
         {
             currentHealth = health;
             HealthChange.Invoke();
+        }
+        else if (health > 4)
+        {
+            return;
         }
         else
         {
@@ -222,7 +216,7 @@ public class PlayerController : MonoBehaviour {
         controller.ChangeDirection(controller.direction);
     }
 
-    IEnumerator blinkSmooth(float timeScale, float duration, Color blinkColor)
+    IEnumerator BlinkSmooth(float timeScale, float duration, Color blinkColor)
     {
         var material = GetComponent<SpriteRenderer>().material;
         var elapsedTime = 0f;

@@ -8,8 +8,8 @@ public class ButtonScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        GameObject gate = GameObject.Find("Gate");
-        GateScript gateScript = gate.GetComponent<GateScript>();
+        gate = GameObject.Find("Gate");
+        gateScript = gate.GetComponent<GateScript>();
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class ButtonScript : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D other)
     {
-        this.GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.green);
+        this.GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.red);
         gateScript.enableLock();
     }
 

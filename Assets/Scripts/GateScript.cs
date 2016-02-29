@@ -16,12 +16,14 @@ public class GateScript : MonoBehaviour {
     public void disableLock ()
     {
         this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = false;
-        this.transform.Find("Terrain").GetComponent<BoxCollider2D>().enabled = false;
+        this.transform.Find("R Wall").GetComponent<BoxCollider2D>().enabled = false;
+        this.transform.Find("R Wall").Find("L Wall").GetComponent<BoxCollider2D>().enabled = false;
     }
 
     public void enableLock ()
     {
         this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = true;
-        this.transform.Find("Terrain").GetComponent<BoxCollider2D>().enabled = true;
+        this.transform.Find("R Wall").GetComponent<BoxCollider2D>().enabled = true;
+        this.transform.Find("R Wall").Find("L Wall").GetComponent<BoxCollider2D>().enabled = true;
     }
 }

@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour {
     public AudioSource jumpSoundEffect;
     public AudioSource damageSoundEffect;
     public AudioSource projectionSoundEffect;
+    public AudioSource nearGateSoundEffect;
+    public AudioSource healthSoundEffect;
 
     public Transform groundCheck;
     public float groundCheckRadius;
@@ -72,34 +74,31 @@ public class PlayerController : MonoBehaviour {
             }
 		}
 
-        if (selected && Input.GetKeyDown(KeyCode.Space)) {
+        if (selected && Input.GetKeyDown(KeyCode.Space) && (currentHealth > 1) && !NearGate()) {
             // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
-            if (currentHealth > 1)
+            int health;
+            if (currentHealth == 4)
             {
-                int health;
-                if (currentHealth == 4)
-                {
-                    health = 2;
-                    SetHealth(2);
-                }
-                else
-                {
-                    health = 1;
-                    SetHealth(1);
-                }
-                Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
-                Vector3 newPos;
-                if (direction == "left")
-                {
-                    newPos = new Vector3(oldPos.x - 3, oldPos.y, 0);
-                }
-                else
-                {
-                    newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
-                }
-                Quaternion quat = new Quaternion();
-                CloneCharacter(health, newPos, quat, direction);
+                health = 2;
+                SetHealth(2);
             }
+            else
+            {
+                health = 1;
+                SetHealth(1);
+            }
+            Vector2 oldPos = this.GetComponent<Rigidbody2D>().position;
+            Vector3 newPos;
+            if (direction == "left")
+            {
+                newPos = new Vector3(oldPos.x - 3, oldPos.y, 0);
+            }
+            else
+            {
+                newPos = new Vector3(oldPos.x + 3, oldPos.y, 0);
+            }
+            Quaternion quat = new Quaternion();
+            CloneCharacter(health, newPos, quat, direction);
         }
 
         if (invulnerable && Time.time > startTime + invulnerableDuration)
@@ -122,7 +121,42 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-    void ChangeDirection(string newDirection)
+    // Check if the character is within projection distance of a gate
+    // The player must be within the y height of gate also for this to return true
+    private bool NearGate()
+    {
+        GameObject[] gates = GameObject.FindGameObjectsWithTag("Gate");
+        foreach (GameObject gate in gates)
+        {
+            if (direction == "left")
+            {
+                if (this.transform.position.x > gate.transform.position.x &&
+                    this.transform.position.x - gate.transform.position.x < 4 &&
+                    this.transform.position.y < gate.transform.position.y + 3.374 &&
+                    this.transform.position.y > gate.transform.position.y)
+                {
+                    StartCoroutine(BlinkSmooth(2f, 1, Color.cyan));
+                    nearGateSoundEffect.Play();
+                    return true;
+                }
+            }
+            else
+            {
+                if (gate.transform.position.x > this.transform.position.x && 
+                    gate.transform.position.x - this.transform.position.x < 4 &&
+                    this.transform.position.y < gate.transform.position.y + 3.374 &&
+                    this.transform.position.y > gate.transform.position.y)
+                {
+                    StartCoroutine(BlinkSmooth(4f, 1, Color.cyan));
+                    nearGateSoundEffect.Play();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void ChangeDirection(string newDirection)
     {
         SpriteRenderer spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
         if (newDirection == "left")

@@ -3,12 +3,11 @@ using System.Collections;
 
 public class ButtonScript : MonoBehaviour {
 
-    private GameObject gate;
+    public GameObject gate;
     private GateScript gateScript;
 
     // Use this for initialization
     void Start () {
-        gate = GameObject.Find("Gate");
         gateScript = gate.GetComponent<GateScript>();
     }
 

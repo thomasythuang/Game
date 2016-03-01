@@ -5,7 +5,7 @@ public class GateScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
@@ -18,6 +18,7 @@ public class GateScript : MonoBehaviour {
         this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = false;
         this.transform.Find("R Wall").GetComponent<BoxCollider2D>().enabled = false;
         this.transform.Find("R Wall").Find("L Wall").GetComponent<BoxCollider2D>().enabled = false;
+        this.transform.Find("R Wall").Find("Top Wall").GetComponent<BoxCollider2D>().enabled = false;
     }
 
     public void enableLock ()
@@ -25,5 +26,6 @@ public class GateScript : MonoBehaviour {
         this.transform.Find("Lock").GetComponent<SpriteRenderer>().enabled = true;
         this.transform.Find("R Wall").GetComponent<BoxCollider2D>().enabled = true;
         this.transform.Find("R Wall").Find("L Wall").GetComponent<BoxCollider2D>().enabled = true;
+        this.transform.Find("R Wall").Find("Top Wall").GetComponent<BoxCollider2D>().enabled = true;
     }
 }

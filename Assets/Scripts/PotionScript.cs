@@ -18,6 +18,7 @@ public class PotionScript : MonoBehaviour {
         if (other.gameObject.tag == "Character")
         {
             PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            playerController.healthSoundEffect.Play();
             playerController.SetHealth(playerController.currentHealth + 1);
             Destroy(this.gameObject);
         }

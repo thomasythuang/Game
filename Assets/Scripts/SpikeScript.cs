@@ -18,7 +18,7 @@ public class SpikeScript : MonoBehaviour {
         if (collision.gameObject.tag == "Character")
         {
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
-            playerController.DamageCharacter();
+            playerController.DamageCharacter();;
         }
     }
 

@@ -210,6 +210,7 @@ public class PlayerController : MonoBehaviour {
         projectionSoundEffect.Play();
         GameObject clone = Instantiate(Resources.Load("Character"), pos, quat) as GameObject;
         PlayerController cloneController = clone.GetComponent<PlayerController>();
+        cloneController.invulnerable = false;
         cloneController.currentHealth = health;
         cloneController.direction = initialDirection;
         cloneController.initCharacterSprites(cloneController);

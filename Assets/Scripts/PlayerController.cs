@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (selected && Input.GetKey(KeyCode.RightArrow)) {
-			characterRigidbody.velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+			characterRigidbody.velocity = new Vector2(moveSpeed, characterRigidbody.velocity.y);
 
             if (direction != "right")
             {
@@ -65,14 +65,22 @@ public class PlayerController : MonoBehaviour {
             }
 		}
 
+
+        // If the left or right arrow keys are released, immediately halt horizontal movement
+        // This makes movement substantially more precise
 		if (selected && Input.GetKey(KeyCode.LeftArrow)) {
-            characterRigidbody.velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+            characterRigidbody.velocity = new Vector2(-moveSpeed, characterRigidbody.velocity.y);
 
             if (direction != "left")
             {
                 ChangeDirection("left");
             }
 		}
+
+        if (selected && (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)))
+        {
+            characterRigidbody.velocity = new Vector2(0, characterRigidbody.velocity.y);
+        }
 
         if (selected && Input.GetKeyDown(KeyCode.Space) && (currentHealth > 1) && !NearGate()) {
             // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
@@ -128,28 +136,31 @@ public class PlayerController : MonoBehaviour {
         GameObject[] gates = GameObject.FindGameObjectsWithTag("Gate");
         foreach (GameObject gate in gates)
         {
-            if (direction == "left")
+            if (!gate.GetComponent<GateScript>().isOpen)
             {
-                if (this.transform.position.x > gate.transform.position.x &&
-                    this.transform.position.x - gate.transform.position.x < 4 &&
-                    this.transform.position.y < gate.transform.position.y + 3.374 &&
-                    this.transform.position.y > gate.transform.position.y)
+                if (direction == "left")
                 {
-                    StartCoroutine(BlinkSmooth(2f, 1, Color.cyan));
-                    nearGateSoundEffect.Play();
-                    return true;
+                    if (this.transform.position.x > gate.transform.position.x &&
+                        this.transform.position.x - gate.transform.position.x < 4 &&
+                        this.transform.position.y < gate.transform.position.y + 3.374 &&
+                        this.transform.position.y > gate.transform.position.y)
+                    {
+                        StartCoroutine(BlinkSmooth(2f, 1, Color.cyan));
+                        nearGateSoundEffect.Play();
+                        return true;
+                    }
                 }
-            }
-            else
-            {
-                if (gate.transform.position.x > this.transform.position.x && 
-                    gate.transform.position.x - this.transform.position.x < 4 &&
-                    this.transform.position.y < gate.transform.position.y + 3.374 &&
-                    this.transform.position.y > gate.transform.position.y)
+                else
                 {
-                    StartCoroutine(BlinkSmooth(4f, 1, Color.cyan));
-                    nearGateSoundEffect.Play();
-                    return true;
+                    if (gate.transform.position.x > this.transform.position.x &&
+                        gate.transform.position.x - this.transform.position.x < 4 &&
+                        this.transform.position.y < gate.transform.position.y + 3.374 &&
+                        this.transform.position.y > gate.transform.position.y)
+                    {
+                        StartCoroutine(BlinkSmooth(4f, 1, Color.cyan));
+                        nearGateSoundEffect.Play();
+                        return true;
+                    }
                 }
             }
         }

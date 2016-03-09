@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour {
             characterRigidbody.velocity = new Vector2(0, characterRigidbody.velocity.y);
         }
 
-        if (selected && Input.GetKeyDown(KeyCode.Space) && (currentHealth > 1) && !NearGate()) {
+        if (selected && (Input.GetKeyDown(KeyCode.Space) || (Input.GetKeyDown(KeyCode.E))) && (currentHealth > 1) && !NearGate()) {
             // Health dividing. Right now we're being brutal, and rounding down 3 -> 1 and 1
             int health;
             if (currentHealth == 4)
@@ -117,15 +117,6 @@ public class PlayerController : MonoBehaviour {
         if (this.transform.position.y < -7)
         {
             DestroyCharacter();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftBracket))
-        {
-            SetHealth(currentHealth - 1);
-        }
-        if (Input.GetKeyDown(KeyCode.RightBracket))
-        {
-            SetHealth(currentHealth + 1);
         }
 	}
 

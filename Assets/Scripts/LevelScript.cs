@@ -17,12 +17,7 @@ public class LevelScript : MonoBehaviour {
         {
             RestartLevel();
         }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");
-            Debug.Log(characters.Length);
-        }
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) || (Input.GetKeyDown(KeyCode.Q)))
         {
             GameObject[] characters = GameObject.FindGameObjectsWithTag("Character");
             if (characters.Length > 1)

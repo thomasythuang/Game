@@ -1,5 +1,10 @@
 # Game
 
+Class Project for Northwestern EECS 395: Game Development Studio
+
+
+
+
 Workflow:
 
 For merge conflicts (especially if it's just the projectsettings.asset file):

@@ -2,7 +2,7 @@
 
 Class Project for Northwestern EECS 395: Game Development Studio
 
-
+[Play the game here!](https://thomasythuang.itch.io/kirbys-identity-crisis)
 
 
 Workflow:
